@@ -34,8 +34,37 @@
   }
   ],
 
-  "unassignedTrips": [],
-  "willCallTrips": [],
+  "unassignedTrips": [
+  {
+    "tripId": "req_001",
+    "pickupTimeLocal": "10:45",
+    "passengerShort": "M. Rodriguez",
+    "mobilityIcon": "🚶‍♀️",
+    "isRoundTrip": false,
+    "pickupLabel": "🏠 Acorn Run, FW",
+    "dropoffLabel": "Millwood Hospital"
+  },
+  {
+    "tripId": "req_001",
+    "pickupTimeLocal": "10:15",
+    "passengerShort": "A. Feller",
+    "mobilityIcon": "🛌",
+    "isRoundTrip": false,
+    "pickupLabel": "BAS",
+    "dropoffLabel": "Stayton"
+  }
+  ],
+  "willCallTrips": [
+    {
+    "tripId": "req_001",
+    "pickupTimeLocal": "ASAP",
+    "passengerShort": "B. Serious",
+    "mobilityIcon": "👩‍🦽",
+    "isRoundTrip": true,
+    "pickupLabel": "HSCV",
+    "dropoffLabel": "HSW"
+  }
+  ],
   "scheduleBlocks": [],
   "gridTrips": []
 }

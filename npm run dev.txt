@@ -4,3 +4,14 @@ cd trip-engine-ui
 npm run dev
 
 http://localhost:5173
+
+To push:
+git add . && git commit -m "WIP" && git push
+
+
+To clone:
+git clone https://github.com/YOUR_USERNAME/trip-engine-ui.git
+cd trip-engine-ui
+npm install
+npm run dev
+
