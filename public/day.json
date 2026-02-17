@@ -1,0 +1,41 @@
+{
+  "org": {
+    "orgId": "org_ctt_001",
+    "timezone": "America/Chicago"
+  },
+  "day": {
+  "dateLocal": "2026-02-17",
+  "startTimeLocal": "2026-02-17T00:00:00-06:00",
+  "slotMinutes": 15,
+  "slotsPerDayView": 96
+  },
+  "vehicles": [
+  { "vehicleId": "veh_062", "unitNumber": "62", "isOutOfService": false, "displayOrder": 1, "drivers": ["Martin R.", "Carlton T."], "capabilities": ["🚶‍♀️", "👩‍🦽", "🛌"] },
+  { "vehicleId": "veh_055", "unitNumber": "55", "isOutOfService": false, "displayOrder": 2, "drivers": ["Jamie W.", "Alex C. (training)"], "capabilities": ["🚶‍♀️", "👩‍🦽", "🧑‍🦼"] },
+  { "vehicleId": "veh_041", "unitNumber": "41", "isOutOfService": false, "displayOrder": 3, "drivers": ["Renee P."], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
+  { "vehicleId": "veh_073", "unitNumber": "73", "isOutOfService": false, "displayOrder": 4, "drivers": ["Sam K."], "capabilities": ["🚶‍♀️"] },
+  { "vehicleId": "veh_088", "unitNumber": "88", "isOutOfService": false, "displayOrder": 5, "drivers": ["Derek L.", "Nina S."], "capabilities": ["🚶‍♀️", "👩‍🦽", "🛌"] },
+  { "vehicleId": "veh_027", "unitNumber": "27", "isOutOfService": false, "displayOrder": 6, "drivers": ["Priya D."], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
+  { "vehicleId": "veh_019", "unitNumber": "19", "isOutOfService": false, "displayOrder": 7, "drivers": ["Omar H."], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
+  { "vehicleId": "veh_066", "unitNumber": "66", "isOutOfService": false, "displayOrder": 8, "drivers": ["Carmen J."], "capabilities": ["🚶‍♀️", "👩‍🦽", "🧑‍🦼"] },
+  { "vehicleId": "veh_090", "unitNumber": "90", "isOutOfService": false, "displayOrder": 9, "drivers": ["Evan B."], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
+  { "vehicleId": "veh_078", "unitNumber": "78", "isOutOfService": true, "oosReason": "Lift issue", "displayOrder": 99, "drivers": ["Taylor G."], "capabilities": ["🚶‍♀️", "👩‍🦽"] }
+  ],
+  
+  "incomingRequests": [
+  {
+    "tripId": "req_001",
+    "pickupTimeLocal": "09:15",
+    "passengerShort": "M. Nguyen",
+    "mobilityIcon": "👩‍🦽",
+    "isRoundTrip": true,
+    "pickupLabel": "MCNR",
+    "dropoffLabel": "HMDT"
+  }
+  ],
+
+  "unassignedTrips": [],
+  "willCallTrips": [],
+  "scheduleBlocks": [],
+  "gridTrips": []
+}

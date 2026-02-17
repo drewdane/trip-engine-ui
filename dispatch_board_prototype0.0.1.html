@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dispatch Board Prototype</title>
+<style>
+  :root{--bg:#f7f8fa;--muted:#6b7280;--card:#fff;--accent:#0ea5a4;}
+  body{font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:var(--bg); color:#111;}
+  .app{display:grid;grid-template-columns:320px 1fr 360px; gap:12px; padding:16px; height:calc(100vh - 32px); box-sizing:border-box;}
+  .panel{background:var(--card); border-radius:8px; padding:12px; box-shadow:0 1px 2px rgba(0,0,0,.04); overflow:auto;}
+  /* Incoming / Unassigned */
+  .left-col{display:flex;flex-direction:column; gap:8px;}
+  .section-title{font-weight:700; margin:8px 4px;}
+  .list{display:flex;flex-direction:column; gap:8px;}
+  .card{background:#fff;border:1px solid #e6e9ee;padding:10px;border-radius:8px;cursor:grab;display:flex;align-items:center;justify-content:space-between;}
+  .card.small{padding:8px;font-size:14px;}
+  .card .left{display:flex;gap:8px;align-items:center;}
+  .time{font-weight:700;margin-right:8px;}
+  .cap{font-size:18px; opacity:0.95;}
+  .card:hover{box-shadow:0 6px 18px rgba(12,28,54,.08);transform:translateY(-2px);}
+  /* Hover preview */
+  .card .preview{display:none; position:absolute; background:#fff;border:1px solid #e6e9ee;padding:10px;border-radius:8px; width:300px; left:340px; top:70px; box-shadow:0 12px 30px rgba(12,28,54,.08); z-index:40;}
+  .card.expanded .preview{display:block;}
+  /* Grid */
+  .grid{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; align-items:start;}
+  .grid-header{display:flex; gap:8px; padding-bottom:8px; border-bottom:1px solid #eee; margin-bottom:8px;}
+  .col{background:transparent; min-height:600px; border:1px dashed rgba(0,0,0,.03); border-radius:6px; padding:8px; position:relative;}
+  .col-header{font-weight:700; margin-bottom:8px; display:flex;justify-content:space-between; align-items:center;}
+  .time-col{width:60px; display:flex; flex-direction:column; gap:12px; margin-right:8px; color:var(--muted);}
+  .times{display:flex; flex-direction:column; gap:12px; padding-right:8px;}
+  .card-assigned{background:linear-gradient(180deg,#fffef8,#f8fff7); border:1px solid #efe6d8; padding:8px; border-radius:6px; margin-bottom:8px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;}
+  .small-muted{font-size:12px;color:var(--muted);}
+  .status-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px;}
+  .status-enroute{background:#60a5fa;} .status-onscene{background:#34d399;} .status-transport{background:#f59e0b;} .status-atdrop{background:#7c3aed;} .status-clear{background:#10b981;}
+  .attention{color:#b91c1c;margin-left:6px;font-weight:700;}
+  /* right panel */
+  .right{display:flex;flex-direction:column;gap:8px;}
+  .right .detail{font-size:14px}
+  .pill{display:inline-block;padding:6px 8px;border-radius:999px;background:#f1f5f9;border:1px solid #e2e8f0;font-size:12px;margin-right:6px;}
+  /* drop highlight */
+  .drop-target{outline:3px dashed rgba(14,165,164,.18); border-radius:6px;}
+  /* responsive */
+  @media (max-width:1100px){ .app{grid-template-columns:260px 1fr;} .right{display:none;} }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="panel left-col">
+    <div class="section-title">Incoming Requests</div>
+    <div class="list" id="incomingList">
+      <!-- incoming cards -->
+    </div>
+    <div class="section-title">Unassigned (Scheduled)</div>
+    <div class="list" id="unassignedList">
+      <!-- unassigned cards -->
+    </div>
+    <div class="section-title">Will-Call</div>
+    <div class="list" id="willcallList"></div>
+  </div>
+
+  <div class="panel" id="centerPanel">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button id="newTripBtn">+ New Trip</button>
+        <div class="small-muted">Day view — 15-min rows</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;"><input placeholder="Search" id="search" /></div>
+    </div>
+
+    <div style="display:flex; gap:12px; margin-top:12px;">
+      <div class="time-col">
+        <div style="height:8px;"></div>
+        <div class="times">
+          <div>08:00</div><div>09:00</div><div>10:00</div><div>11:00</div><div>12:00</div><div>13:00</div><div>14:00</div><div>15:00</div>
+        </div>
+      </div>
+      <div style="flex:1">
+        <div class="grid-header">
+          <div style="width:100%; display:flex; gap:8px;" id="vehicleHeaders"></div>
+        </div>
+        <div class="grid" id="grid">
+          <!-- columns -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel right" id="rightPanel">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div><strong id="detailTitle">Select a trip</strong></div>
+      <div><button id="closeDetail">×</button></div>
+    </div>
+    <div id="detailBody"><div class="small-muted">Click a trip to view details here.</div></div>
+  </div>
+</div>
+
+<script>
+// sample data
+const vehicles = [
+  { id: 'v1', name: 'Vehicle 1', driver: 'Marta', helper: 'Noah', caps:['🚶‍♀️','👩‍🦽'] },
+  { id: 'v2', name: 'Vehicle 2', driver: 'Perez', helper: '', caps:['👩‍🦽','🧑‍🦼'] },
+  { id: 'v3', name: 'Vehicle 3', driver: 'Lee', helper: 'Alex', caps:['🛌','👩‍🦽'] },
+  { id: 'v4', name: 'Vehicle 4', driver: 'Garza', helper: '', caps:['🚶‍♀️'] }
+];
+const incoming = [
+  { id:'r1', pickup:'09:00', last:'Doe', type:'🚶‍♀️', pickupLoc:'123 Main St', dropLoc:'456 Oak Ave', payee:'Acct 123', notes:'Patient requests assistance', recurring:false },
+  { id:'r2', pickup:'09:15', last:'Smith', type:'👩‍🦽', pickupLoc:'Clinic A', dropLoc:'Hospital B', payee:'Acct 456', notes:'Wheelchair transfer', recurring:false },
+  { id:'r3', pickup:'10:30', last:'Parks', type:'🛌', pickupLoc:'Facility X', dropLoc:'Hospital C', payee:'Acct 999', notes:'Stretcher - two-person', recurring:false }
+];
+const unassigned = [
+  { id:'u1', pickup:'09:45', last:'Yee', type:'👩‍🦽', pickupLoc:'Clinic B', dropLoc:'Home', payee:'Acct 22', notes:'Return trip', scheduledPickup:'09:45' },
+  { id:'u2', pickup:'12:00', last:'Terry', type:'🚶‍♀️', pickupLoc:'Clinic C', dropLoc:'Home', payee:'Acct 77', notes:'Ambulatory', scheduledPickup:'12:00' }
+];
+const willcall = [
+  { id:'w1', pickup:'ASAP', last:'Garcia', type:'🚶‍♀️', pickupLoc:'Facility W', dropLoc:'Home', payee:'Acct 11', notes:'Will-call return' }
+];
+const assigned = [
+  // include a trip assigned later than scheduled to show attention icon
+  { id:'a1', pickup:'10:00', scheduledPickup:'09:30', last:'Bernal', type:'🚶‍♀️', pickupLoc:'Clinic D', dropLoc:'Home', status:'En Route', vehicle:'v2' },
+  { id:'a2', pickup:'11:45', scheduledPickup:'11:45', last:'Hein', type:'👩‍🦽', pickupLoc:'Hospital Z', dropLoc:'Facility Y', status:'On Scene', vehicle:'v3' },
+  { id:'a3', pickup:'13:00', scheduledPickup:'13:00', last:'Carlson', type:'🚶‍♀️', pickupLoc:'Center Q', dropLoc:'Home', status:'Scheduled', vehicle:'v4' }
+];
+
+// render incoming and unassigned lists
+function makeCard(item, draggable=true){
+  const el = document.createElement('div');
+  el.className = 'card small';
+  el.draggable = draggable;
+  el.dataset.id = item.id;
+  el.innerHTML = `<div class="left"><div class="time">${item.pickup}</div><div><strong>${item.last}</strong></div></div><div class="cap">${item.type || ''}</div>`;
+  // preview element
+  const preview = document.createElement('div');
+  preview.className='preview';
+  preview.innerHTML = `<div style="font-weight:700;">${item.last} — ${item.pickup}</div>
+    <div style="margin-top:6px;">${item.pickupLoc} → ${item.dropLoc}</div>
+    <div class="small-muted" style="margin-top:8px;">Payee: ${item.payee || 'n/a'}</div>
+    <div style="margin-top:6px;">${item.notes || ''}</div>`;
+  el.appendChild(preview);
+  el.addEventListener('mouseenter',()=>el.classList.add('expanded'));
+  el.addEventListener('mouseleave',()=>el.classList.remove('expanded'));
+  el.addEventListener('dragstart',(e)=>{
+    e.dataTransfer.setData('text/plain', JSON.stringify(item));
+    setTimeout(()=>el.style.opacity='0.4',50);
+  });
+  el.addEventListener('dragend',()=>el.style.opacity='1');
+  el.addEventListener('click',()=>showDetail(item));
+  return el;
+}
+
+function renderLists(){
+  const inc=document.getElementById('incomingList');
+  inc.innerHTML=''; incoming.forEach(i=>inc.appendChild(makeCard(i,true)));
+  const un=document.getElementById('unassignedList');
+  un.innerHTML=''; unassigned.forEach(i=>un.appendChild(makeCard(i,true)));
+  const wc=document.getElementById('willcallList'); wc.innerHTML=''; willcall.forEach(i=>wc.appendChild(makeCard(i,true)));
+}
+renderLists();
+
+// render grid headers and columns
+function renderGrid(){
+  const headers = document.getElementById('vehicleHeaders');
+  headers.innerHTML='';
+  const grid = document.getElementById('grid');
+  grid.innerHTML='';
+  vehicles.forEach(v=>{
+    const h = document.createElement('div'); h.style.flex='1'; h.innerHTML = `<div class="col-header"><div><strong>${v.name}</strong></div><div class="small-muted">${v.driver}${v.helper? ' • ' + v.helper:''}</div></div>`;
+    const capsSpan = document.createElement('div'); capsSpan.className='small-muted'; capsSpan.style.marginTop='6px';
+    capsSpan.textContent = v.caps.join(' ');
+    h.appendChild(capsSpan);
+    headers.appendChild(h);
+
+    const col = document.createElement('div'); col.className='col dropzone'; col.dataset.vid=v.id;
+    col.addEventListener('dragover',e=>{ e.preventDefault(); col.classList.add('drop-target'); });
+    col.addEventListener('dragleave',()=>col.classList.remove('drop-target'));
+    col.addEventListener('drop',e=>{
+      e.preventDefault(); col.classList.remove('drop-target');
+      try{
+        const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+        assignToVehicle(data, v.id);
+      }catch(err){ console.warn('drop parse',err); }
+    });
+    // put assigned cards that belong here
+    assigned.filter(a=>a.vehicle===v.id).forEach(a=>{
+      const card = document.createElement('div'); card.className='card-assigned';
+      const left = document.createElement('div');
+      const statusClass = statusClassFor(a.status);
+      left.innerHTML = `<div style="font-weight:700;">${a.last} <span class="small-muted"> ${a.type}</span></div>
+        <div class="small-muted">${a.pickupLoc} → ${a.dropLoc || ''}</div>`;
+      const right = document.createElement('div'); 
+      const att = (a.scheduledPickup && a.scheduledPickup !== a.pickup) ? '<span class="attention">⚠ Late</span>' : '';
+      right.innerHTML = `<div><span class="status-dot ${statusClass}"></span></div>${att}`;
+      card.appendChild(left); card.appendChild(right);
+      card.addEventListener('click',()=>showDetail(a));
+      col.appendChild(card);
+    });
+    grid.appendChild(col);
+  });
+}
+
+function statusClassFor(s){
+  if(!s) return 'status-clear';
+  if(s==='En Route') return 'status-enroute';
+  if(s==='On Scene') return 'status-onscene';
+  if(s==='Transporting') return 'status-transport';
+  if(s==='At Drop') return 'status-atdrop';
+  if(s==='Clear') return 'status-clear';
+  return 'status-clear';
+}
+
+renderGrid();
+
+function assignToVehicle(item, vid){
+  // remove from lists
+  ['incoming','unassigned','willcall'].forEach(listName=>{
+    window[listName] = window[listName].filter(it=>it.id !== item.id);
+  });
+  // create assigned record with a default status
+  const newAssigned = {...item, vehicle:vid, status:'Scheduled', pickup:item.pickup, scheduledPickup:item.pickup};
+  assigned.push(newAssigned);
+  renderLists(); renderGrid();
+  showDetail(newAssigned);
+}
+
+// detail panel
+function showDetail(item){
+  document.getElementById('detailTitle').textContent = `${item.last} • ${item.pickup}`;
+  const body = document.getElementById('detailBody');
+  body.innerHTML = `
+    <div class="detail"><strong>Pickup:</strong> ${item.pickupLoc || '—'}</div>
+    <div class="detail"><strong>Dropoff:</strong> ${item.dropLoc || '—'}</div>
+    <div style="margin-top:8px;"><span class="pill">${item.type || ''}</span> <span class="pill">${item.payee || ''}</span></div>
+    <div style="margin-top:12px;" class="small-muted">${item.notes || ''}</div>
+    <div style="margin-top:18px;"><label>Status</label><select id="statusSel">
+      <option>Scheduled</option><option>En Route</option><option>On Scene</option><option>Transporting</option><option>At Drop</option><option>Clear</option>
+    </select></div>
+    <div style="margin-top:10px;"><button id="saveBtn">Save</button> <button id="cancelBtn">Cancel Trip</button></div>
+  `;
+  document.getElementById('statusSel').value = item.status || 'Scheduled';
+  document.getElementById('saveBtn').addEventListener('click',()=>{
+    const v = document.getElementById('statusSel').value;
+    // update assigned item if present
+    const idx = assigned.findIndex(a=>a.id===item.id);
+    if(idx>=0){ assigned[idx].status = v; renderGrid(); }
+    else{
+      // maybe in unassigned lists — update there
+      ['incoming','unassigned','willcall'].forEach(listName=>{
+        const arr = window[listName];
+        const i = arr.findIndex(x=>x.id===item.id);
+        if(i>=0){ arr[i].status = v; renderLists(); }
+      });
+    }
+    alert('Status saved (prototype)');
+  });
+  document.getElementById('cancelBtn').addEventListener('click',()=>{
+    if(!confirm('Cancel this trip? This will remove it from the board in the prototype.')) return;
+    // remove from assigned and lists
+    ['incoming','unassigned','willcall'].forEach(listName=> window[listName] = window[listName].filter(it=>it.id !== item.id));
+    for(let i=0;i<assigned.length;i++) if(assigned[i].id===item.id) assigned.splice(i,1);
+    renderLists(); renderGrid(); body.innerHTML='<div class="small-muted">Trip cancelled (prototype)</div>'; document.getElementById('detailTitle').textContent='Select a trip';
+  });
+}
+
+// allow creating a new trip (quick)
+document.getElementById('newTripBtn').addEventListener('click',()=>{
+  const last = prompt('Passenger last name','New');
+  if(!last) return;
+  const pickup = prompt('Pickup time (HH:MM)','10:00');
+  const type = prompt('Type emoji (🚶‍♀️ 👩‍🦽 🧑‍🦼 🛌)','🚶‍♀️');
+  const id = 'x'+Math.random().toString(36).slice(2,8);
+  incoming.unshift({id, pickup, last, type, pickupLoc:'Unknown', dropLoc:'Unknown', payee:'', notes:''});
+  renderLists();
+});
+
+// small search
+document.getElementById('search').addEventListener('input',(e)=>{
+  const q = e.target.value.toLowerCase();
+  document.querySelectorAll('.card').forEach(c=>{
+    const txt = c.textContent.toLowerCase();
+    c.style.display = txt.includes(q) ? 'flex' : 'none';
+  });
+});
+
+// expose for debugging
+window.vehicles=vehicles; window.incoming=incoming; window.unassigned=unassigned; window.willcall=willcall; window.assigned=assigned;
+
+</script>
+</body>
+</html>

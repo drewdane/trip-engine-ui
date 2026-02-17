@@ -1,0 +1,6 @@
+## Run locally
+
+cd trip-engine-ui
+npm run dev
+
+http://localhost:5173
