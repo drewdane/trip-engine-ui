@@ -4,66 +4,137 @@
     "timezone": "America/Chicago"
   },
   "day": {
-  "dateLocal": "2026-02-17",
-  "startTimeLocal": "2026-02-17T00:00:00-06:00",
+  "dateLocal": "2026-02-20",
+  "startTimeLocal": "2026-02-20T00:00:00-06:00",
   "slotMinutes": 15,
   "slotsPerDayView": 96
   },
   "vehicles": [
   { "vehicleId": "veh_062", "unitNumber": "62", "isOutOfService": false, "displayOrder": 1, "drivers": ["Martin R.", "Carlton T."], "capabilities": ["🚶‍♀️", "👩‍🦽", "🛌"] },
-  { "vehicleId": "veh_055", "unitNumber": "55", "isOutOfService": false, "displayOrder": 2, "drivers": ["Jamie W.", "Alex C. (training)"], "capabilities": ["🚶‍♀️", "👩‍🦽", "🧑‍🦼"] },
+  { "vehicleId": "veh_042", "unitNumber": "42", "isOutOfService": false, "displayOrder": 4, "drivers": ["Jamie W.", "Alex C. (training)"], "capabilities": ["🚶‍♀️", "👩‍🦽", "🧑‍🦼"] },
   { "vehicleId": "veh_041", "unitNumber": "41", "isOutOfService": false, "displayOrder": 3, "drivers": ["Renee P."], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
-  { "vehicleId": "veh_073", "unitNumber": "73", "isOutOfService": false, "displayOrder": 4, "drivers": ["Sam K."], "capabilities": ["🚶‍♀️"] },
-  { "vehicleId": "veh_088", "unitNumber": "88", "isOutOfService": false, "displayOrder": 5, "drivers": ["Derek L.", "Nina S."], "capabilities": ["🚶‍♀️", "👩‍🦽", "🛌"] },
-  { "vehicleId": "veh_027", "unitNumber": "27", "isOutOfService": false, "displayOrder": 6, "drivers": ["Priya D."], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
-  { "vehicleId": "veh_019", "unitNumber": "19", "isOutOfService": false, "displayOrder": 7, "drivers": ["Omar H."], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
-  { "vehicleId": "veh_066", "unitNumber": "66", "isOutOfService": false, "displayOrder": 8, "drivers": ["Carmen J."], "capabilities": ["🚶‍♀️", "👩‍🦽", "🧑‍🦼"] },
-  { "vehicleId": "veh_090", "unitNumber": "90", "isOutOfService": false, "displayOrder": 9, "drivers": ["Evan B."], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
-  { "vehicleId": "veh_078", "unitNumber": "78", "isOutOfService": true, "oosReason": "Lift issue", "displayOrder": 99, "drivers": ["Taylor G."], "capabilities": ["🚶‍♀️", "👩‍🦽"] }
+  { "vehicleId": "veh_043", "unitNumber": "43", "isOutOfService": false, "displayOrder": 5, "drivers": ["Sam K."], "capabilities": ["🚶‍♀️"] },
+  { "vehicleId": "veh_063", "unitNumber": "63", "isOutOfService": false, "displayOrder": 2, "drivers": ["Derek L.", "Nina S."], "capabilities": ["🚶‍♀️", "👩‍🦽", "🛌"] },
+  { "vehicleId": "veh_044", "unitNumber": "44", "isOutOfService": false, "displayOrder": 6, "drivers": ["Shawn S.."], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
+  { "vehicleId": "veh_045", "unitNumber": "45", "isOutOfService": false, "displayOrder": 7, "drivers": ["Omar H."], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
+  { "vehicleId": "veh_020", "unitNumber": "20", "isOutOfService": false, "displayOrder": 8, "drivers": ["Carmen J."], "capabilities": ["🚶‍♀️", "👩‍🦽", "👩‍🦽", "🛌"] },
+  { "vehicleId": "veh_050", "unitNumber": "50", "isOutOfService": false, "displayOrder": 9, "drivers": ["Evan B."], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
+  { "vehicleId": "veh_010", "unitNumber": "10", "isOutOfService": true, "oosReason": "Lift issue", "displayOrder": 99, "drivers": ["Taylor G."], "capabilities": ["🚶‍♀️", "👩‍🦽"] }
   ],
   
   "incomingRequests": [
   {
     "tripId": "req_001",
-    "pickupTimeLocal": "09:15",
-    "passengerShort": "M. Nguyen",
-    "mobilityIcon": "👩‍🦽",
-    "isRoundTrip": true,
-    "pickupLabel": "MCNR",
-    "dropoffLabel": "HMDT"
-  }
+      "pickupTimeLocal": "09:15",
+      "passengerShort": "M. Nguyen",
+      "mobilityIcon": "👩‍🦽",
+      "isRoundTrip": true,
+      "pickupLabel": "MCNR",
+      "dropoffLabel": "HMDT"
+    }
   ],
-
   "unassignedTrips": [
-  {
-    "tripId": "req_001",
-    "pickupTimeLocal": "10:45",
-    "passengerShort": "M. Rodriguez",
-    "mobilityIcon": "🚶‍♀️",
-    "isRoundTrip": false,
-    "pickupLabel": "🏠 Acorn Run, FW",
-    "dropoffLabel": "Millwood Hospital"
-  },
-  {
-    "tripId": "req_001",
-    "pickupTimeLocal": "10:15",
-    "passengerShort": "A. Feller",
-    "mobilityIcon": "🛌",
-    "isRoundTrip": false,
-    "pickupLabel": "BAS",
-    "dropoffLabel": "Stayton"
-  }
+    {
+      "tripId": "req_002",
+      "pickupTimeLocal": "10:45",
+      "passengerShort": "M. Rodriguez",
+      "mobilityIcon": "🚶‍♀️",
+      "isRoundTrip": false,
+      "pickupLabel": "🏠 Acorn Run, FW",
+      "dropoffLabel": "Millwood Hospital"
+    },
+    {
+      "tripId": "req_003",
+      "pickupTimeLocal": "10:15",
+      "passengerShort": "A. Feller",
+      "mobilityIcon": "🛌",
+      "isRoundTrip": false,
+      "pickupLabel": "BAS",
+      "dropoffLabel": "Stayton"
+    },
+    {
+      "tripId": "req_005",
+      "passengerShort": "U. Watt",
+      "pickupTimeLocal": "11:00",
+      "pickupLabel": "🏠 Camp Bowie, FW",
+      "dropoffLabel": "JPS Outpatient",
+      "mobilityIcon": "🚶‍♀️",
+      "isRoundTrip": false
+    },
+    {
+      "tripId": "req_006",
+      "passengerShort": "D. Lightful",
+      "pickupTimeLocal": "11:30",
+      "pickupLabel": "🏠 Keller Pkwy",
+      "dropoffLabel": "Baylor Scott & White",
+      "mobilityIcon": "👩‍🦽",
+      "isRoundTrip": true
+    },
+    {
+      "tripId": "req_007",
+      "passengerShort": "N. Igma",
+      "pickupTimeLocal": "12:15",
+      "pickupLabel": "MCNR",
+      "dropoffLabel": "Millwood Hospital",
+      "mobilityIcon": "🦯",
+      "isRoundTrip": false
+    },
+    {
+      "tripId": "req_008",
+      "passengerShort": "B. Hive",
+      "pickupTimeLocal": "13:00",
+      "pickupLabel": "🏠 Riverside Dr, FW",
+      "dropoffLabel": "Dialysis Center",
+      "mobilityIcon": "👨‍🦽",
+      "isRoundTrip": true
+    },
+    {
+      "tripId": "req_009",
+      "passengerShort": "C. Food",
+      "pickupTimeLocal": "14:10",
+      "pickupLabel": "🏠 Saginaw Blvd",
+      "dropoffLabel": "Cardiology Clinic",
+      "mobilityIcon": "🚶‍♀️",
+      "isRoundTrip": false
+    }
   ],
   "willCallTrips": [
     {
-    "tripId": "req_001",
-    "pickupTimeLocal": "ASAP",
-    "passengerShort": "B. Serious",
-    "mobilityIcon": "👩‍🦽",
-    "isRoundTrip": true,
-    "pickupLabel": "HSCV",
-    "dropoffLabel": "HSW"
-  }
+      "tripId": "req_004",
+      "pickupTimeLocal": "ASAP",
+      "passengerShort": "B. Serious",
+      "mobilityIcon": "👩‍🦽",
+      "isRoundTrip": true,
+      "pickupLabel": "HSCV",
+      "dropoffLabel": "HSW"
+    },
+    {
+      "tripId": "req_010",
+      "passengerShort": "N. A. Hurry",
+      "pickupTimeLocal": "ASAP",
+      "pickupLabel": "HSCV",
+      "dropoffLabel": "HSW",
+      "mobilityIcon": "👩‍🦽",
+      "isRoundTrip": true
+    },
+    {
+      "tripId": "req_011",
+      "passengerShort": "F. This",
+      "pickupTimeLocal": "Will Call",
+      "pickupLabel": "🏥 ER Discharge",
+      "dropoffLabel": "🏠 Home (NRH)",
+      "mobilityIcon": "🛌",
+      "isRoundTrip": false
+    },
+    {
+      "tripId": "req_012",
+      "passengerShort": "I. Dunno",
+      "pickupTimeLocal": "Will Call",
+      "pickupLabel": "Radiology",
+      "dropoffLabel": "🏠 Home (FW)",
+      "mobilityIcon": "🚶‍♀️",
+      "isRoundTrip": false
+    }
   ],
   "scheduleBlocks": [],
   "gridTrips": []

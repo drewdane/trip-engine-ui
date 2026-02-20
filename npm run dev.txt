@@ -10,7 +10,7 @@ git add . && git commit -m "WIP" && git push
 
 
 To clone:
-git clone https://github.com/YOUR_USERNAME/trip-engine-ui.git
+git clone https://github.com/drewdane/trip-engine-ui.git
 cd trip-engine-ui
 npm install
 npm run dev
