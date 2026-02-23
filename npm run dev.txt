@@ -15,3 +15,32 @@ cd trip-engine-ui
 npm install
 npm run dev
 
+src/
+├── App.tsx                     # Main app shell + layout + grid composition
+├── main.tsx                    # Vite entry point (ReactDOM.createRoot)
+├── index.css                   # Global CSS (includes overflow-x fix)
+│
+├── types.ts                    # Shared domain types
+│   ├── TripCard
+│   ├── AssignedBlock
+│   ├── DayPayload
+│   └── Vehicle
+│
+├── day.json                    # Mock day payload (fixtures / dev data)
+│
+├── components/
+│   ├── QueueSection.tsx        # Incoming / Unassigned / Will-Call lists
+│   ├── TripCardCompact.tsx     # Compact draggable trip card
+│   ├── VehicleColumnBody.tsx   # One vehicle’s column (assigned blocks)
+│   ├── VehicleHeadersRow.tsx   # Vehicle header row (names, OOS state)
+│   └── TimeAxis.tsx            # Left-side time labels + now line
+│
+├── hooks/
+│   ├── useDayData.ts           # Loads day payload + manages queues
+│   ├── useDispatchDnD.ts       # Drag/drop logic (assign, unassign, preview)
+│   └── useNowLine.ts           # Computes “now” position in the grid
+│
+└── utils/
+    ├── dnd.ts                  # Drag helpers (slot math, pointer Y)
+    ├── time.ts                 # Time formatting helpers
+    └── tz.ts                   # Timezone-safe date math

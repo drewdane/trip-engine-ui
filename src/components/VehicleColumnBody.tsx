@@ -24,14 +24,14 @@ function AssignedTripBlock({ b }: { b: AssignedBlock }) {
         right: 6,
         top: b.topPx,
         height: b.heightPx,
+        boxSizing: "border-box",
         borderRadius: 10,
         border: "1px solid #cbd5e1",
-        background: "#f8fafc",
+        background: "#fcf8f8",
         padding: "6px 8px",
         overflow: "hidden",
         cursor: "grab",
         opacity: isDragging ? 0.35 : 1,
-        // Keep this block above slot lines, below preview
         zIndex: 20
       }}
       title={`${from} → ${to}`}
@@ -45,7 +45,7 @@ function AssignedTripBlock({ b }: { b: AssignedBlock }) {
 
       <div style={{ fontWeight: 900, fontSize: 12, marginTop: 2 }}>{b.trip.passengerShort}</div>
 
-      <div style={{ fontSize: 11, color: "#64748b", marginTop: 2 }}>
+      <div style={{ fontSize: 11, color: "#8b6464", marginTop: 2 }}>
         {from} → {to}
       </div>
     </div>
@@ -76,7 +76,7 @@ export function VehicleColumnBody({
       style={{
         height: gridHeight,
         position: "relative",
-        background: isOutOfService ? "#f1f5f9" : "#fff"
+        background: isOutOfService ? "#fee2e2" : "#f2f3f8"
       }}
     >
       {/* Inner droppable surface (stable coordinate space under scroll) */}
@@ -91,7 +91,15 @@ export function VehicleColumnBody({
       >
         {/* Slot lines */}
         {Array.from({ length: slots }).map((_, i) => (
-          <div key={i} style={{ height: SLOT_PX, borderBottom: "1px dashed #f0f2f5" }} />
+          <div
+            key={i}
+            style={{
+              height: SLOT_PX,
+              borderBottom: i % 4 === 0 ? "2px solid #64748b" : "1px dashed #c4c7da",
+              boxSizing: "border-box",
+              transform: "translateY(-1px)"
+            }}
+          />
         ))}
 
         {/* Preview frame */}

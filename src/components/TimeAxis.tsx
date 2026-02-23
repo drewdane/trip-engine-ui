@@ -6,7 +6,7 @@ export function TimeAxis({
   gridHeight,
   slots,
   dayStart,
-  slotMinutes
+  slotMinutes,
 }: {
   gridHeight: number;
   slots: number;
@@ -22,7 +22,7 @@ export function TimeAxis({
         position: "sticky",
         left: 0,
         zIndex: 50,
-        background: "#fff"
+        background: "#f1f3fb",
       }}
     >
       <div style={{ height: gridHeight }}>
@@ -31,24 +31,29 @@ export function TimeAxis({
             key={i}
             style={{
               height: SLOT_PX,
-              borderBottom: "1px dashed #f0f2f5",
-              position: "relative"
+              borderBottom: i % 4 === 0 ? "2px solid #64748b" : "1px dashed #c4c7da",
+              boxSizing: "border-box",
+              margin: 0,
+              padding: 0,
             }}
           >
-            {i % 4 === 0 ? (
+            {i % 4 === 0 && (
               <span
                 style={{
-                  position: "absolute",
-                  top: -7,
-                  left: 6,
+                  display: "inline-block",
+                  marginTop: "2px",
+                  padding: "0 6px",
                   fontSize: 11,
                   color: "#64748b",
-                  fontVariantNumeric: "tabular-nums"
+                  fontVariantNumeric: "tabular-nums",
+                  background: "#fafbff",
+                  borderRadius: 6,
+                  lineHeight: "16px",
                 }}
               >
                 {timeLabelFromSlot(dayStart, slotMinutes, i)}
               </span>
-            ) : null}
+            )}
           </div>
         ))}
       </div>

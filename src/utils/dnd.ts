@@ -1,4 +1,4 @@
-export const SLOT_PX = 16;
+export const SLOT_PX = 30;
 
 export function getClientYFromEvent(ev: Event): number {
   if ("changedTouches" in ev && (ev as TouchEvent).changedTouches?.length) {

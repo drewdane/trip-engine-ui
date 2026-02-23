@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { AssignedBlock, DayPayload, TripCard } from "../types";
 import { SLOT_PX } from "../utils/dnd";
+import { TRIP_BLOCK_HEIGHT_PX } from "../config/layout.ts";
 
 export function useDispatchDnD(params: {
   data: DayPayload | null;
@@ -19,24 +20,23 @@ export function useDispatchDnD(params: {
   } | null>(null);
 
   function computeSnappedTopPx(args: {
-    activeTop: number;
-    overRectTop: number;
-    heightPx: number;
-  }) {
-    const { activeTop, overRectTop, heightPx } = args;
+  activeTop: number;
+  overRectTop: number;
+  heightPx: number;
+}) {
+  const { activeTop, overRectTop, heightPx } = args;
 
-    // overRectTop is for an element inside the scrolling container,
-    // so (activeTop - overRectTop) already reflects scrolling.
-    let topPx = activeTop - overRectTop;
+  let topPx = activeTop - overRectTop;
 
-    const gridHeight = (data?.day.slotsPerDayView ?? 0) * SLOT_PX;
-    topPx = Math.max(0, Math.min(topPx, Math.max(0, gridHeight - heightPx)));
+  const gridHeight = (data?.day.slotsPerDayView ?? 0) * SLOT_PX;
+  topPx = Math.max(0, Math.min(topPx, gridHeight - heightPx));
 
-    const slotIndex = Math.round(topPx / SLOT_PX);
-    topPx = slotIndex * SLOT_PX;
+  // Force snap to exact slot multiple
+  const slotIndex = Math.round(topPx / SLOT_PX);
+  topPx = slotIndex * SLOT_PX;
 
-    return { topPx, slotIndex };
-  }
+  return { topPx, slotIndex };
+}
 
   function queueKeyFromOverId(overId: string): "incoming" | "unassigned" | "willcall" | null {
     if (overId === "queue-incoming") return "incoming";
@@ -110,7 +110,7 @@ export function useDispatchDnD(params: {
       return;
     }
 
-    const heightPx = 70;
+    const heightPx = TRIP_BLOCK_HEIGHT_PX;
 
     const activeTop =
       e.active.rect.current.translated?.top ??
@@ -151,7 +151,7 @@ export function useDispatchDnD(params: {
       const overRectTop = e.over?.rect?.top;
       if (typeof overRectTop !== "number") return;
 
-      const heightPx = 70;
+      const heightPx = TRIP_BLOCK_HEIGHT_PX;
 
       const activeTop =
         e.active.rect.current.translated?.top ??

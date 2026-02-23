@@ -1,3 +1,5 @@
+// --- Time labels / display helpers ---
+
 export function timeLabelFromSlot(dayStart: Date, slotMinutes: number, slotIndex: number): string {
   const d = new Date(dayStart.getTime() + slotIndex * slotMinutes * 60_000);
   const hh = String(d.getHours()).padStart(2, "0");
@@ -25,4 +27,60 @@ export function shortPlace(code?: string, label?: string, street?: string, city?
   if (streetOnly) return streetOnly;
   if (city) return city;
   return "—";
+}
+
+// --- Timezone helpers (moved here from tz.ts) ---
+
+export function yyyyMmDdInTz(d: Date, timeZone: string): string {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(d);
+
+  const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "";
+  return `${get("year")}-${get("month")}-${get("day")}`;
+}
+
+export function localYmd(date: Date, timeZone: string): string {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+
+  const get = (type: string) => parts.find(p => p.type === type)?.value ?? "";
+  return `${get("year")}-${get("month")}-${get("day")}`;
+}
+
+export function formatClockInTz(d: Date, tz: string): string {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: tz,
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true
+  }).format(d);
+}
+
+export function formatFriendlyDateInTz(d: Date, tz: string): string {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: tz,
+    weekday: "short",
+    month: "short",
+    day: "numeric"
+  }).format(d);
+}
+
+export function shiftYmd(ymd: string, deltaDays: number): string {
+  const [y, m, d] = ymd.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  dt.setUTCDate(dt.getUTCDate() + deltaDays);
+  return dt.toISOString().slice(0, 10);
+  
+}
+export function minutesSinceDayStartInTz(now: Date, dayStartLocalIso: string): number {
+  const start = new Date(dayStartLocalIso);
+  return Math.floor((now.getTime() - start.getTime()) / 60000);
 }

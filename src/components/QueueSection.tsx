@@ -10,21 +10,21 @@ export function QueueSection({
 }: {
   title: string;
   items?: TripCard[];
-  tone: "incoming" | "normal" | "willcall";
-  droppableId: string; // "queue-incoming" | "queue-unassigned" | "queue-willcall"
+  tone: "normal" | "willcall" | "incoming";
+  droppableId: string; //"queue-unassigned" | "queue-willcall" | "queue-incoming" 
 }) {
   const { isOver, setNodeRef } = useDroppable({ id: droppableId });
 
-  const badge = tone === "incoming" ? "🟣" : tone === "willcall" ? "🟠" : "🔵";
+  const badge = tone === "willcall" ? "🟠" : tone === "normal" ? "🔵" : "🟣";
 
   return (
     <div
       ref={setNodeRef}
       style={{
-        border: isOver ? "2px solid #60a5fa" : "1px solid #e6e8ec",
+        border: isOver ? "2px solid #60a5fa" : "1px solid #d6d8e6",
         borderRadius: 12,
         padding: 10,
-        background: isOver ? "rgba(96, 165, 250, 0.10)" : "#fff"
+        background: isOver ? "rgba(96, 165, 250, 0.10)" : "#f2f3f8"
       }}
     >
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>

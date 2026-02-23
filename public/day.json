@@ -4,22 +4,20 @@
     "timezone": "America/Chicago"
   },
   "day": {
-  "dateLocal": "2026-02-20",
-  "startTimeLocal": "2026-02-20T00:00:00-06:00",
+  "dateLocal": "2026-02-23",
+  "startTimeLocal": "2026-02-23T00:00:00-06:00",
   "slotMinutes": 15,
   "slotsPerDayView": 96
   },
   "vehicles": [
-  { "vehicleId": "veh_062", "unitNumber": "62", "isOutOfService": false, "displayOrder": 1, "drivers": ["Martin R.", "Carlton T."], "capabilities": ["🚶‍♀️", "👩‍🦽", "🛌"] },
-  { "vehicleId": "veh_042", "unitNumber": "42", "isOutOfService": false, "displayOrder": 4, "drivers": ["Jamie W.", "Alex C. (training)"], "capabilities": ["🚶‍♀️", "👩‍🦽", "🧑‍🦼"] },
+  { "vehicleId": "veh_062", "unitNumber": "62", "isOutOfService": false, "displayOrder": 1, "drivers": ["Martin R.", "Carlton T."], "capabilities": ["🚶‍♀️", "🛌"] },
+  { "vehicleId": "veh_042", "unitNumber": "42", "isOutOfService": false, "displayOrder": 4, "drivers": ["Jamie W.", "Alex C. (T)"], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
   { "vehicleId": "veh_041", "unitNumber": "41", "isOutOfService": false, "displayOrder": 3, "drivers": ["Renee P."], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
-  { "vehicleId": "veh_043", "unitNumber": "43", "isOutOfService": false, "displayOrder": 5, "drivers": ["Sam K."], "capabilities": ["🚶‍♀️"] },
-  { "vehicleId": "veh_063", "unitNumber": "63", "isOutOfService": false, "displayOrder": 2, "drivers": ["Derek L.", "Nina S."], "capabilities": ["🚶‍♀️", "👩‍🦽", "🛌"] },
-  { "vehicleId": "veh_044", "unitNumber": "44", "isOutOfService": false, "displayOrder": 6, "drivers": ["Shawn S.."], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
-  { "vehicleId": "veh_045", "unitNumber": "45", "isOutOfService": false, "displayOrder": 7, "drivers": ["Omar H."], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
-  { "vehicleId": "veh_020", "unitNumber": "20", "isOutOfService": false, "displayOrder": 8, "drivers": ["Carmen J."], "capabilities": ["🚶‍♀️", "👩‍🦽", "👩‍🦽", "🛌"] },
-  { "vehicleId": "veh_050", "unitNumber": "50", "isOutOfService": false, "displayOrder": 9, "drivers": ["Evan B."], "capabilities": ["🚶‍♀️", "👩‍🦽"] },
-  { "vehicleId": "veh_010", "unitNumber": "10", "isOutOfService": true, "oosReason": "Lift issue", "displayOrder": 99, "drivers": ["Taylor G."], "capabilities": ["🚶‍♀️", "👩‍🦽"] }
+  { "vehicleId": "veh_043", "unitNumber": "43", "isOutOfService": false, "displayOrder": 5, "drivers": ["Sam K."], "capabilities": ["🚶‍♀️", "👩‍🦽", "🧑‍🦼"] },
+  { "vehicleId": "veh_063", "unitNumber": "63", "isOutOfService": false, "displayOrder": 2, "drivers": ["Derek L.", "Nina S."], "capabilities": ["🚶‍♀️", "🛌"] },
+  { "vehicleId": "veh_044", "unitNumber": "44", "isOutOfService": false, "displayOrder": 6, "drivers": ["Shawn S.."], "capabilities": ["🚶‍♀️", "👩‍🦽", "🧑‍🦼"] },
+  { "vehicleId": "veh_045", "unitNumber": "45", "isOutOfService": false, "displayOrder": 7, "drivers": ["Omar H."], "capabilities": ["🚶‍♀️", "👩‍🦽", "🧑‍🦼"] },
+  { "vehicleId": "veh_020", "unitNumber": "20", "isOutOfService": true, "oosReason": "Lift issue", "displayOrder": 99, "drivers": ["Taylor G."], "capabilities": ["🚶‍♀️", "👩‍🦽", "🧑‍🦼"] }
   ],
   
   "incomingRequests": [
@@ -110,7 +108,7 @@
     },
     {
       "tripId": "req_010",
-      "passengerShort": "N. A. Hurry",
+      "passengerShort": "N. Ahurry",
       "pickupTimeLocal": "ASAP",
       "pickupLabel": "HSCV",
       "dropoffLabel": "HSW",
