@@ -17,7 +17,7 @@ export function VehicleHeadersRow({
         display: "grid",
         gridAutoFlow: "column",
         gridAutoColumns: `${layout.colWidth}px`,
-        columnGap: layout.colGap,
+        gap: layout.colGap,
         alignItems: "start"
       }}
     >
@@ -26,57 +26,65 @@ export function VehicleHeadersRow({
           key={v.vehicleId}
           style={{
             border: "1px solid #e6e8ec",
-            borderRadius: 12,
+            borderRadius: 10,
             overflow: "hidden",
-            background: v.isOutOfService ? "#e4e4f0" : "#e4d6d6",
+            background: v.isOutOfService
+                ? "#f1f5f9"
+                : "linear-gradient(to bottom, #fafbff 20%, #f1f3fb 80%)",
             opacity: v.isOutOfService ? 0.95 : 1
           }}
         >
           <div
             style={{
               height: layout.headerHeight,
-              padding: 8,
+              padding: "6px 8px",
               borderBottom: "1px solid #e6e8ec",
               background: v.isOutOfService
                 ? "#f1f5f9"
                 : "linear-gradient(to bottom, #fafbff 20%, #f1f3fb 80%)",
-              position: "relative"
+              boxSizing: "border-box"
             }}
           >
-            {v.isOutOfService ? (
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: 8,
-                  left: 8,
-                  padding: "2px 8px",
-                  borderRadius: 999,
-                  fontSize: 12,
-                  fontWeight: 900,
-                  background: "#fee2e2",
-                  border: "1px solid #fecaca",
-                  color: "#991b1b",
-                  lineHeight: 1.2
-                }}
-                title="Out of service"
-              >
-                OOS
-              </div>
-            ) : null}
-
-            <div style={{ fontSize: 26, fontWeight: 900, textAlign: "center", lineHeight: 1 }}>
+            {/* Unit number */}
+            <div
+              style={{
+                fontSize: 24,
+                fontWeight: 900,
+                textAlign: "center",
+                lineHeight: "24px",
+                marginTop: 2
+              }}
+            >
               {v.unitNumber}
             </div>
 
-            <div style={{ marginTop: 4, textAlign: "center", fontWeight: 800, fontSize: 13 }}>
-              {v.isOutOfService ? "Out of service" : v.drivers.join(" • ")}
+            {/* Drivers row OR OOS row (same slot) */}
+            <div
+              style={{
+                textAlign: "center",
+                fontWeight: 800,
+                fontSize: 14,
+                lineHeight: "18px",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                color: v.isOutOfService ? "#991b1b" : "#0f172a"
+              }}
+              title={v.isOutOfService ? "Out of Service" : (v.drivers?.join(" • ") ?? "")}
+            >
+              {v.isOutOfService ? "☠️ OUT OF SERVICE" : (v.drivers?.join(" • ") ?? "")}
             </div>
 
-            {!v.isOutOfService ? (
-              <div style={{ marginTop: 6, textAlign: "center", fontSize: 16 }}>
-                {v.capabilities.join(" ")}
-              </div>
-            ) : null}
+            {/* Capabilities */}
+            <div
+              style={{
+                textAlign: "center",
+                fontSize: 16,
+                lineHeight: "20px"
+              }}
+            >
+              {v.capabilities?.join(" ") ?? ""}
+            </div>
           </div>
         </div>
       ))}

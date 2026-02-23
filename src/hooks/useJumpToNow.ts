@@ -1,5 +1,7 @@
+import { useEffect, useRef } from "react";
 import { localYmd } from "../utils/time";
 import type { DayPayload } from "../types";
+import { SLOT_PX } from "../config/layout";
 
 export function useJumpToNow({
   data,
@@ -16,26 +18,52 @@ export function useJumpToNow({
   vScrollRef: React.RefObject<HTMLDivElement | null>;
   viewportHeightPx: number;
 }) {
-  const jumpToNow = () => {
-    if (!data?.org?.timezone) return;
+  const pendingRef = useRef(false);
 
-    const todayYmd = localYmd(new Date(), data.org.timezone);
+  const scrollToNow = (topPx: number | null) => {
+    const el = vScrollRef.current;
+    if (!el) return;
 
-    setViewDate(todayYmd);  // Force switch to today (like the Today button)
+    const fallbackNoon = 48 * SLOT_PX; // 12:00 if 15-min slots; harmless even if slightly off
 
-    // Give a tiny delay for data/viewDate to update, then scroll
-    setTimeout(() => {
-      const el = vScrollRef.current;
-      if (!el) return;
-
-      if (nowLineTop !== null) {
-        const target = Math.max(0, nowLineTop - viewportHeightPx / 2);
-        el.scrollTo({ top: target, behavior: "smooth" });
-      } else {
-        el.scrollTo({ top: 48 * 30, behavior: "smooth" }); // fallback ~12:00
-      }
-    }, 200);  // 200ms delay covers render cycle
+    const target = topPx != null ? Math.max(0, topPx - viewportHeightPx / 2) : fallbackNoon;
+    el.scrollTo({ top: target, behavior: "smooth" });
   };
+
+  const jumpToNow = () => {
+    const tz = data?.org?.timezone;
+    if (!tz) return;
+
+    const todayYmd = localYmd(new Date(), tz);
+
+    pendingRef.current = true;
+
+    // If we’re already on today, scroll immediately using current nowLineTop.
+    if (viewDate === todayYmd) {
+      scrollToNow(nowLineTop);
+      pendingRef.current = false;
+      return;
+    }
+
+    // Otherwise switch to today; effect below will scroll when nowLineTop updates for today.
+    setViewDate(todayYmd);
+  };
+
+  useEffect(() => {
+    const tz = data?.org?.timezone;
+    if (!tz) return;
+    if (!pendingRef.current) return;
+
+    const todayYmd = localYmd(new Date(), tz);
+
+    // Wait until we’re actually viewing today
+    if (viewDate !== todayYmd) return;
+
+    // If useNowLine returns null briefly during load, we still allow a fallback scroll once.
+    scrollToNow(nowLineTop);
+
+    pendingRef.current = false;
+  }, [data?.org?.timezone, viewDate, nowLineTop]);
 
   return { jumpToNow };
 }

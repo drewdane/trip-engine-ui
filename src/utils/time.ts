@@ -1,5 +1,4 @@
 // --- Time labels / display helpers ---
-
 export function timeLabelFromSlot(dayStart: Date, slotMinutes: number, slotIndex: number): string {
   const d = new Date(dayStart.getTime() + slotIndex * slotMinutes * 60_000);
   const hh = String(d.getHours()).padStart(2, "0");
@@ -30,7 +29,6 @@ export function shortPlace(code?: string, label?: string, street?: string, city?
 }
 
 // --- Timezone helpers (moved here from tz.ts) ---
-
 export function yyyyMmDdInTz(d: Date, timeZone: string): string {
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone,
@@ -80,7 +78,37 @@ export function shiftYmd(ymd: string, deltaDays: number): string {
   return dt.toISOString().slice(0, 10);
   
 }
-export function minutesSinceDayStartInTz(now: Date, dayStartLocalIso: string): number {
-  const start = new Date(dayStartLocalIso);
-  return Math.floor((now.getTime() - start.getTime()) / 60000);
+export function minutesSinceDayStartInTz(now: Date, dayStartLocalIso: string, timeZone: string): number {
+  // dayStartLocalIso is an org-local wall clock like "2026-02-23T00:00:00"
+  // Compute minutes using org-local *parts*, not epoch subtraction.
+
+  // Parse start local ISO (YYYY-MM-DDTHH:MM[:SS])
+  const [ymd, timePart = "00:00:00"] = dayStartLocalIso.split("T");
+  const [startH, startM] = timePart.split(":").map((x) => Number(x) || 0);
+
+  // Get now's org-local YMD + HM via Intl (timezone-correct)
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(now);
+
+  const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "00";
+  const nowYmd = `${get("year")}-${get("month")}-${get("day")}`;
+  const nowH = Number(get("hour")) || 0;
+  const nowM = Number(get("minute")) || 0;
+
+  // Day difference in whole days (treat YMD as calendar days)
+  const startDay = new Date(`${ymd}T00:00:00Z`).getTime();
+  const nowDay = new Date(`${nowYmd}T00:00:00Z`).getTime();
+  const deltaDays = Math.round((nowDay - startDay) / 86400000);
+
+  const startTotal = startH * 60 + startM;
+  const nowTotal = nowH * 60 + nowM;
+
+  return deltaDays * 1440 + (nowTotal - startTotal);
 }

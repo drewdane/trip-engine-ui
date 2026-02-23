@@ -1,17 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
-import { sortVehiclesForGrid } from "./utils/sortVehicles";
-import { TimeAxis } from "./components/TimeAxis";
 import { layout, SLOT_PX } from "./config/layout";
-import { TripCardCompactOverlay } from "./components/TripCardCompact";
+import { TimeAxis } from "./components/TimeAxis";
 import { QueueSection } from "./components/QueueSection";
 import { VehicleColumnBody } from "./components/VehicleColumnBody";
-import { useDayData } from "./hooks/useDayData";
-import { useDispatchDnD } from "./hooks/useDispatchDnD";
-import { useNowLine } from "./hooks/useNowLine";
 import { VehicleHeadersRow } from "./components/VehicleHeadersRow";
+import { TripCardCompactOverlay } from "./components/TripCardCompact";
+import { useDayData } from "./hooks/useDayData";
+import { useNowLine } from "./hooks/useNowLine";
 import { useLiveClock } from "./hooks/useLiveClock";
 import { useJumpToNow } from "./hooks/useJumpToNow";
+import { useDispatchDnD } from "./hooks/useDispatchDnD";
+import { sortVehiclesForGrid } from "./utils/sortVehicles";
 import { localYmd, shiftYmd, formatFriendlyDateInTz } from "./utils/time";
 import type { AssignedBlock, TripCard } from "./types";
 
@@ -129,7 +129,7 @@ export default function App() {
                     <div style={{ width: layout.timeAxisWidth, flex: "0 0 auto", borderRight: "1px solid #d6d8e6", position: "sticky", left: 0, zIndex: 95, background: "#e4e4f0", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, color: "#64748b", fontWeight: 800, alignSelf: "stretch" }}>
                       <button
                         onClick={jumpToNow}
-                        disabled={nowLineTop == null}
+                        disabled={!data?.org?.timezone}
                         title="Jump to now"
                         style={{ appearance: "none", border: "1px solid #8b6464", background: "#77aa97ec", color: "#fff", cursor: "pointer", borderRadius: 8, padding: "6px 10px", fontSize: 12, fontWeight: 800 }}
                       >
@@ -155,6 +155,7 @@ export default function App() {
                           vehicleId={v.vehicleId}
                           gridHeight={gridHeight}
                           slots={slots}
+                          slotMinutes={data.day.slotMinutes}
                           isOutOfService={v.isOutOfService}
                           assignedBlocks={assigned.filter((b) => b.vehicleId === v.vehicleId)}
                           preview={dnd.preview}
